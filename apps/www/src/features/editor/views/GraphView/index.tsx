@@ -8,6 +8,7 @@ import useConfig from "../../../../store/useConfig";
 import useJson from "../../../../store/useJson";
 import { useModal } from "../../../../store/useModal";
 import { NotSupported } from "./NotSupported";
+import { OpenInToDiagram } from "./OpenInToDiagram";
 import { SecureInfo } from "./SecureInfo";
 import { Toolbar } from "./Toolbar";
 import useGraph from "./stores/useGraph";
@@ -88,6 +89,7 @@ export const GraphView = ({ isWidget = false }: GraphProps) => {
   return (
     <Box pos="relative" h="100%" w="100%">
       {!isWidget && <SecureInfo />}
+      {!isWidget && <OpenInToDiagram />}
       {!isWidget && <Toolbar />}
       <StyledEditorWrapper
         $widget={isWidget}

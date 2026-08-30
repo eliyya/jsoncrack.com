@@ -2,6 +2,7 @@ import React from "react";
 import { Anchor, Badge, Button, Image, List, Overlay, Stack, Text, ThemeIcon } from "@mantine/core";
 import styled, { keyframes } from "styled-components";
 import { LuCheck } from "react-icons/lu";
+import { getToDiagramEditorUrl, openInToDiagram } from "../../../../lib/utils/todiagramHandoff";
 import useConfig from "../../../../store/useConfig";
 import useFile from "../../../../store/useFile";
 
@@ -102,6 +103,19 @@ export const NotSupported = () => {
   const darkmodeEnabled = useConfig(state => state.darkmodeEnabled);
   const format = useFile(state => state.format);
 
+  const continueUrl = getToDiagramEditorUrl({ medium: "data_limit", format });
+
+  const handleContinue = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    const opened = openInToDiagram({
+      url: continueUrl,
+      content: useFile.getState().getContents(),
+      format,
+    });
+
+    // Popup blocked: let the anchor navigate normally.
+    if (opened) event.preventDefault();
+  };
+
   return (
     <Overlay backgroundOpacity={0.6} color={darkmodeEnabled ? "#111" : "#e2f0f3"} blur="3" center>
       <CardWrapper data-dark={darkmodeEnabled}>
@@ -145,8 +159,8 @@ export const NotSupported = () => {
           <ShiningButton>
             <Button
               component="a"
-              href={`https://todiagram.com/editor?utm_source=jsoncrack&utm_medium=data_limit&modal=upgrade&format=${format}&example=true`}
-              rel="noopener"
+              href={continueUrl}
+              onClick={handleContinue}
               size="md"
               fullWidth
               target="_blank"

@@ -1,8 +1,11 @@
 import React from "react";
 import type { ModalProps } from "@mantine/core";
-import { Modal, Stack, Text, ScrollArea, Flex, CloseButton } from "@mantine/core";
+import { Modal, Stack, Text, ScrollArea, Flex, CloseButton, Button } from "@mantine/core";
 import { CodeHighlight } from "@mantine/code-highlight";
 import type { NodeData } from "jsoncrack-react";
+import { LuPencil } from "react-icons/lu";
+import { getToDiagramEditorUrl, openInToDiagram } from "../../../lib/utils/todiagramHandoff";
+import useFile from "../../../store/useFile";
 import useGraph from "../../editor/views/GraphView/stores/useGraph";
 
 // return object from json removing array and object fields
@@ -28,6 +31,19 @@ const jsonPathToString = (path?: NodeData["path"]) => {
 
 export const NodeModal = ({ opened, onClose }: ModalProps) => {
   const nodeData = useGraph(state => state.selectedNode);
+  const format = useFile(state => state.format);
+  const editUrl = getToDiagramEditorUrl({ medium: "node_modal", format });
+
+  const handleEdit = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    const opened = openInToDiagram({
+      url: editUrl,
+      content: useFile.getState().getContents(),
+      format,
+    });
+
+    // Popup blocked: let the anchor navigate normally.
+    if (opened) event.preventDefault();
+  };
 
   return (
     <Modal size="auto" opened={opened} onClose={onClose} centered withCloseButton={false}>
@@ -63,6 +79,18 @@ export const NodeModal = ({ opened, onClose }: ModalProps) => {
             withCopyButton
           />
         </ScrollArea.Autosize>
+        <Button
+          component="a"
+          href={editUrl}
+          target="_blank"
+          onClick={handleEdit}
+          variant="light"
+          color="teal"
+          size="sm"
+          leftSection={<LuPencil size={14} />}
+        >
+          Edit in ToDiagram
+        </Button>
       </Stack>
     </Modal>
   );

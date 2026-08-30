@@ -13,14 +13,14 @@
   },
   "dependencies": {
     "jsoncrack-react": "workspace:*",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
   },
   "devDependencies": {
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
     "typescript": "5.9.3",
-    "vite": "^8.0.13"
+    "vite": "^8.2.1"
   },
   "packageManager": "pnpm@10.20.0"
 }

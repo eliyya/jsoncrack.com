@@ -1,6 +1,6 @@
 import { getNodePath, parseTree, type Node, type ParseError } from "jsonc-parser";
 import type { EdgeData, GraphData, NodeData, NodeRow } from "./types";
-import { calculateNodeSize } from "./utils/calculateNodeSize";
+import { calculateNodeSize, type NodeTextRow } from "./utils/calculateNodeSize";
 
 export interface ParseGraphResult extends GraphData {
   errors: ParseError[];
@@ -179,14 +179,21 @@ export const parseGraph = (json: string): ParseGraphResult => {
         ...appendParentKey(),
       });
     } else {
-      let displayText: string | [string, string][];
+      let displayText: string | NodeTextRow[];
 
       if (text.some(row => row.key !== null)) {
-        displayText = text.map(row => {
+        displayText = text.map<NodeTextRow>(row => {
           const keyStr = row.key === null ? "" : row.key;
+          // Same condition as the collapse button rendered by ObjectNode's Row
+          const hasCollapseButton =
+            row.key != null &&
+            (row.type === "object" || row.type === "array") &&
+            (row.childrenCount ?? 0) > 0;
 
-          if (row.type === "object") return [keyStr, `{${row.childrenCount ?? 0} keys}`];
-          if (row.type === "array") return [keyStr, `[${row.childrenCount ?? 0} items]`];
+          if (row.type === "object")
+            return [keyStr, `{${row.childrenCount ?? 0} keys}`, hasCollapseButton];
+          if (row.type === "array")
+            return [keyStr, `[${row.childrenCount ?? 0} items]`, hasCollapseButton];
           if (row.value === null) return [keyStr, "null"];
 
           return [keyStr, `${row.value}`];

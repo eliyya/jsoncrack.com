@@ -30,7 +30,7 @@
     "clean": "turbo run clean"
   },
   "devDependencies": {
-    "turbo": "^2.8.20"
+    "turbo": "^2.10.10"
   },
   "engines": {
     "node": ">=24",
@@ -46,7 +46,8 @@
       "unrs-resolver"
     ],
     "overrides": {
-      "html-to-image": "1.11.11"
+      "html-to-image": "1.11.11",
+      "monaco-editor>dompurify": "^3.4.13"
     }
   }
 }
